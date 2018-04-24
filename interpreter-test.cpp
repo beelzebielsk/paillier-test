@@ -13,45 +13,19 @@
 #include <utility>
     using std::pair;
 
-using std::string;
+#include "tests.h"
+    using paillierTest::pair_list;
+    using paillierTest::testResults;
 
-template <typename T1, typename T2>
-using pair_list = vector<pair<T1, T2>>;
+using std::string;
 
 int testTokenizer();
 int testIsInstruction();
 int testInstructionType();
 int testIsDeclarationType();
 int testDeclarationType();
-int testCreateInstructionList(); // TODO
-int testExecute(); // TODO
-
-std::ostream& operator<<(std::ostream&, Instruction::Type);
-
-template<typename Case, typename Result>
-int testResults(pair_list<Case, Result> cases, auto test) {
-    bool allCorrect = true;
-    for (auto pair : cases) {
-        Case thisCase = pair.first;
-        Result expected = pair.second;
-        Result actual;
-        try {
-            actual = test(thisCase);
-            if (actual != expected) {
-                cerr << "Case " << thisCase 
-                    << " has incorrect result." << endl
-                    << "Expected: " << expected << endl
-                    << "Result: " << actual << endl;
-                allCorrect = false;
-            }
-        }
-        catch(InterpreterError& error) {
-            cout << error << endl;
-            allCorrect = false;
-        }
-    }
-    return allCorrect;
-}
+int testCreateInstructionList();
+int testExecute();
 
 #define TEST(testFunction) \
     cout << "Testing " << #testFunction << endl; \
@@ -154,7 +128,6 @@ int testDeclarationType() {
 }
 
 int testCreateInstructionList() {
-    // /*
     pair_list<string, vector<Instruction>> cases = {
         {
             R"(
@@ -188,7 +161,19 @@ int testExecute() {
                 { {"two", 2}, {"three", 3} }
             },
             { {"dest", 5}, {"two", 2}, {"three", 3} }
-        }
+        },
+        {
+            {
+                R"(
+                    add dest five ten
+                    mult dest dest ten
+                    mult dest dest ten
+                    mult dest dest ten
+                )",
+                { {"five", 5}, {"ten", 10} }
+            },
+            { {"dest", 15000}, {"five", 5}, {"ten", 10} }
+        },
     };
 
     auto test = [](pair<string, ProgramState> program) {
@@ -199,32 +184,4 @@ int testExecute() {
     };
 
     return testResults(cases, test);
-}
-
-template <typename T>
-std::ostream& operator<<(std::ostream& out, vector<T> ts) {
-    out << "(";
-    for (T t : ts) {
-        out << t << ", " ;
-    }
-    out << ")";
-    return out;
-}
-
-template <typename T1, typename T2>
-std::ostream& operator<<(std::ostream& out,
-        unordered_map<T1, T2> map) {
-    out << "{";
-    for (auto pair : map) {
-        out << "'" << pair.first << "' : '" << pair.second << "', ";
-    }
-    out << "}";
-    return out;
-}
-
-template <typename T1, typename T2>
-std::ostream& operator<<(std::ostream& out, pair<T1, T2> p) {
-    out << "("
-        << "'" << p.first << "', '" << p.second << "')";
-    return out;
 }
