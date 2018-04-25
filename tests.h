@@ -1,3 +1,6 @@
+#ifndef TESTS_H
+#define TESTS_H
+
 namespace paillierTest {
 
 #include <iostream>
@@ -9,6 +12,7 @@ namespace paillierTest {
     using std::unordered_map;
 #include <utility>
     using std::pair;
+#include <exception>
 
 using std::string;
 
@@ -32,8 +36,8 @@ using std::string;
                     allCorrect = false;
                 }
             }
-            catch(InterpreterError& error) {
-                cerr << error << endl;
+            catch(std::exception& error) {
+                cerr << error.what() << endl;
                 allCorrect = false;
             }
         }
@@ -68,3 +72,5 @@ std::ostream& operator<<(std::ostream& out, vector<T> ts) {
     out << ")";
     return out;
 }
+
+#endif
