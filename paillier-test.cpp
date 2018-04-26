@@ -34,3 +34,71 @@
  *     shares, then summing the result of the multiplication, then
  *     decrypting it, and comparing that to the expected result.
  */
+
+#include <iostream>
+    using std::cout;
+    using std::endl;
+    using std::cerr;
+#include <sstream>
+    using std::stringstream;
+#include <vector>
+    using std::vector;
+#include <unordered_map>
+    using std::unordered_map;
+#include <utility>
+    using std::pair;
+
+#include "tests.h"
+    using paillierTest::pair_list;
+    using paillierTest::testResults;
+
+#include <paillier/paillier.h>
+
+
+#include <NTL/ZZ.h>
+    using NTL::ZZ;
+
+int testSamplePointProbabilities(); // TODO
+int testEncryption(); // TODO
+int testDecryption(); // TODO
+int testEncryptionDecryption(); // TODO
+int testDDLOG(); // TODO
+int testMultiplyNumbers(); // TODO
+
+#define TEST(testFunction) \
+    cout << "Testing " << #testFunction << endl; \
+    if (!( test ## testFunction() )) {\
+        cerr << #testFunction << " test failed." << endl;\
+    }
+
+int main() {
+    TEST(EncryptionDecryption)
+
+    return 0;
+}
+
+int testEncryptionDecryption() {
+    pair_list<ZZ, ZZ> cases {
+        {(ZZ)10, (ZZ)10},
+        //{(ZZ)20, (ZZ)20},
+        //{(ZZ)30, (ZZ)30},
+        //{(ZZ)40, (ZZ)40},
+        //{(ZZ)50, (ZZ)50},
+        //{(ZZ)60, (ZZ)60},
+        //{(ZZ)70, (ZZ)70},
+        //{(ZZ)80, (ZZ)80},
+        //{(ZZ)90, (ZZ)90},
+    };
+
+    auto test = [](ZZ message) {
+        cout << "Start test" << endl;
+        Paillier paillier{};
+        cout << "Construct paillier object" << endl;
+        ZZ cipher = paillier.encrypt(message);
+        ZZ plain = paillier.decrypt(cipher);
+        return plain;
+    };
+
+    return testResults(cases, test);
+    //return 1;
+}
