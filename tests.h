@@ -1,8 +1,7 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-namespace paillierTest {
-
+#include <exception>
 #include <iostream>
     using std::endl;
     using std::cerr;
@@ -13,6 +12,9 @@ namespace paillierTest {
 #include <utility>
     using std::pair;
 #include <exception>
+
+
+namespace paillierTest {
 
 using std::string;
 
@@ -25,15 +27,18 @@ using std::string;
         for (auto pair : cases) {
             Case thisCase = pair.first;
             Result expected = pair.second;
-            Result actual;
+            //Result actual;
+            cerr << "Testing Case " << thisCase << endl;
             try {
-                actual = test(thisCase);
+                Result actual = test(thisCase);
                 if (actual != expected) {
                     cerr << "Case " << thisCase 
                         << " has incorrect result." << endl
                         << "Expected: " << expected << endl
                         << "Result: " << actual << endl;
                     allCorrect = false;
+                } else {
+                    cerr << "Case " << thisCase << " correct." << endl;
                 }
             }
             catch(std::exception& error) {
