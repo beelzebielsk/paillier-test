@@ -16,6 +16,9 @@ interpreter-test : interpreter-test.cpp $(INTERPRETER_SOURCES)
 paillier-test : paillier-test.cpp $(PAILLIER_SOURCES)
 	g++ -g $^ -o $@ $(INCLUDE_FLAGS) $(LIBFLAGS)
 
+data-test : data-test.cpp $(PAILLIER_SOURCES)
+	g++ -g $^ -o $@ $(INCLUDE_FLAGS) $(LIBFLAGS)
+
 utility-test : utility-test.cpp $(PAILLIER_SOURCES)
 	g++ -g $^ -o $@ $(INCLUDE_FLAGS) $(LIBFLAGS)
 
